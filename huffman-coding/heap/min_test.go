@@ -51,3 +51,21 @@ func TestCombineInsertExtract(t *testing.T) {
 	require.Equal(t, 3, h.ExtractMin())
 	require.Equal(t, 6, h.ExtractMin())
 }
+
+func TestExtractMinPanicsOnEmptyHeap(t *testing.T) {
+	h := heap.NewMinHeap(func(a, b int) bool {
+		return a < b
+	})
+	require.PanicsWithValue(t, "heap is empty", func() {
+		h.ExtractMin()
+	})
+}
+
+func TestPeekPanicsOnEmptyHeap(t *testing.T) {
+	h := heap.NewMinHeap(func(a, b int) bool {
+		return a < b
+	})
+	require.PanicsWithValue(t, "heap is empty", func() {
+		h.Peek()
+	})
+}

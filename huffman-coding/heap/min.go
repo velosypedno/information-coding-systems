@@ -72,6 +72,9 @@ func (h *MinHeap[T]) Insert(v T) {
 }
 
 func (h *MinHeap[T]) ExtractMin() T {
+	if len(h.data) == 0 {
+		panic("heap is empty")
+	}
 	min := h.data[0]
 	h.data[0] = h.data[len(h.data)-1]
 	h.data = h.data[:len(h.data)-1]
@@ -80,6 +83,9 @@ func (h *MinHeap[T]) ExtractMin() T {
 }
 
 func (h *MinHeap[T]) Peek() T {
+	if len(h.data) == 0 {
+		panic("heap is empty")
+	}
 	return h.data[0]
 }
 
