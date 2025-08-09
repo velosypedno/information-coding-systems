@@ -36,9 +36,9 @@ func (h *MinHeap[T]) heapifyUp(i int) {
 		if h.less(h.data[i], h.data[parent]) {
 			h.data[i], h.data[parent] = h.data[parent], h.data[i]
 			i = parent
-
+		} else {
+			break
 		}
-		i = parent
 	}
 }
 
