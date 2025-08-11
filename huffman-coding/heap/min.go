@@ -11,7 +11,7 @@ type MinHeap[T any] struct {
 	less Less[T]
 }
 
-func NewMinHeap[T comparable](comp Less[T]) *MinHeap[T] {
+func NewMinHeap[T any](comp Less[T]) *MinHeap[T] {
 	return &MinHeap[T]{
 		data: make([]T, 0),
 		less: comp,
