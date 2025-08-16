@@ -3,7 +3,7 @@ package queue
 import "github.com/velosypedno/information-coding-systems/huffman-coding/heap"
 
 type Item[T any] struct {
-	Value    any
+	Value    T
 	Priority float64
 }
 
@@ -44,4 +44,8 @@ func (q *MinPriorityQueue[T]) IsEmpty() bool {
 
 func (q *MinPriorityQueue[T]) Size() int {
 	return q.heap.Len()
+}
+
+func (q *MinPriorityQueue[T]) String() string {
+	return q.heap.String()
 }
