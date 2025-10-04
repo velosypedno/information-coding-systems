@@ -38,8 +38,9 @@ func NewShannonFanoTree(pairs []Pair) *Node[rune] {
 	splitIndex := 0
 	for i, p := range pairs {
 		splitSum += p.Freq
-		if splitSum >= totalSum/2 {
-			splitIndex = i + 1
+		if splitSum <= totalSum/2 {
+			splitIndex = i
+		} else {
 			break
 		}
 	}

@@ -5,6 +5,7 @@ import (
 	"math"
 	"os"
 	"sort"
+	"strings"
 
 	"github.com/velosypedno/information-coding-systems/shennon-fano-coding/codes"
 	"github.com/velosypedno/information-coding-systems/shennon-fano-coding/tree"
@@ -68,6 +69,19 @@ func main() {
 
 	tree := tree.NewShannonFanoTree(pairs)
 	codesMap := codes.NewShennonFanoCodesMap(tree)
+
+	for r, code := range codesMap {
+		var codeBuilder strings.Builder
+		for i := code.Length - 1; i >= 0; i-- {
+			isZero := (0 == (code.Code&(1<<i))>>i)
+			if isZero {
+				codeBuilder.WriteRune('0')
+			} else {
+				codeBuilder.WriteRune('1')
+			}
+		}
+		fmt.Printf("%c, %v - \n", r, codeBuilder.String())
+	}
 
 	averageLength := 0.0
 	for char, code := range codesMap {

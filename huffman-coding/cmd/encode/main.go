@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"os"
 
 	"github.com/velosypedno/information-coding-systems/huffman-coding/codes"
@@ -27,19 +28,34 @@ func main() {
 	text := string(data)
 	fmt.Println("File successfully read!")
 
-	freqMap := make(map[rune]int)
+	totalLength := 0
+	counterMap := make(map[rune]int)
 	for _, char := range text {
-		freqMap[char]++
+		counterMap[char]++
+		totalLength++
 	}
+	freqMap := make(map[rune]float64)
+	for char, count := range counterMap {
+		freqMap[char] = float64(count) / float64(totalLength)
+	}
+	entropy := 0.0
+	for _, freq := range freqMap {
+		entropy += -1 * freq * math.Log2(freq)
+	}
+	fmt.Printf("Entropy: %f\n", entropy)
 
-	nodes := make([]tree.Node[tree.Pair], 0, len(freqMap))
-	for char, freq := range freqMap {
+	nodes := make([]tree.Node[tree.Pair], 0, len(counterMap))
+	for char, freq := range counterMap {
 		nodes = append(nodes, tree.Node[tree.Pair]{Value: tree.Pair{Char: char, Freq: freq}})
 	}
 
 	root := tree.NewHuffmanTree(nodes)
 	huffmanCodes := codes.NewHuffmanCodesMap(root)
 	encoded, bitLength := codes.EncodeHuffman(text, huffmanCodes)
+	fmt.Println(huffmanCodes)
+	for r, code := range huffmanCodes {
+		fmt.Printf("%c - %b\n", r, code.Code)
+	}
 
 	if err := codes.SaveEncodedContent(encodedFile, encoded, bitLength); err != nil {
 		fmt.Printf("Error saving encoded content: %v\n", err)
@@ -52,5 +68,12 @@ func main() {
 	}
 
 	fmt.Println("Encoding complete!")
+
+	averageLength := 0.0
+	for char, code := range huffmanCodes {
+		averageLength += float64(code.Length) * freqMap[char]
+	}
+	fmt.Printf("Average bit length: %f\n", averageLength)
+
 	fmt.Printf("Encoded bits: %d\n", bitLength)
 }
